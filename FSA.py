@@ -35,9 +35,9 @@ class DFA:
     def change_acceptance_of_empty_word(self, acceptance):
         self.accept_empty_word = acceptance
         if not acceptance:
-            self.accepting_states.remove(0)
+            self.accepting_states.remove(self.start_state)
         else:
-            self.accepting_states.add(0)
+            self.accepting_states.add(self.start_state)
 
     def add_string(self, string, accepted):
         current_state = self.start_state
@@ -72,6 +72,8 @@ class DFA:
     def visualize(self):
         dot = Digraph()
 
+        # Костыль для исправления фантомного бага
+        added_edges = set()
         # Все узлы
         for state in self.stated_transitions.keys():
             cur_shape = "doublecircle" if state in self.accepting_states else "circle"
@@ -91,17 +93,29 @@ class DFA:
             for sym in self.alphabet:
                 if sym in self.stated_transitions[state]:
                     target_state = self.stated_transitions[state][sym]
-                    dot.edge(str(state), str(target_state), label=sym)
+                    cur_edge = (str(state), str(target_state), sym)
+                    if cur_edge not in added_edges:
+                        dot.edge(str(state), str(target_state), label=sym)
+                        added_edges.add(cur_edge)
                 elif self.undefined_string_acception_type == 'Adaptive':
-                    dot.edge(str(state), str(state), label=sym)  # ➰ Петля ➰
-                                                                 #      4
-                                                                 #     www
+                    cur_edge = (str(state), str(state), sym)
+                    if cur_edge not in added_edges:
+                        added_edges.add(cur_edge)
+                        dot.edge(str(state), str(state), label=sym)  # ➰ Петля ➰
+                                                                     #      4
+                                                                     #     www
                 elif self.undefined_string_acception_type == 'Soft':
-                    dot.edge(str(state), everaccepting_state, label=sym)
+                    cur_edge = (str(state), everaccepting_state, sym)
+                    if cur_edge not in added_edges:
+                        dot.edge(str(state), everaccepting_state, label=sym)
+                        added_edges.add(cur_edge)
 
         if self.undefined_string_acception_type == 'Soft':
             for sym in self.alphabet:
-                dot.edge(everaccepting_state, everaccepting_state, label=sym)
+                cur_edge = (everaccepting_state, everaccepting_state, sym)
+                if cur_edge not in added_edges:
+                    dot.edge(everaccepting_state, everaccepting_state, label=sym)
+                    added_edges.add(cur_edge)
 
         return dot
 
@@ -117,7 +131,7 @@ class DFA:
         while class_queue:
             cur_class = class_queue.popleft()
             for symbol in self.alphabet:
-                # States that transit into A by symbol
+                # States that transit into cur by symbol
                 transitables_to_cur = {s for s in states if self.stated_transitions.get(s, {}).get(symbol) in cur_class}
 
                 for eq_class in equivalence_classes[:]:

@@ -51,7 +51,7 @@ class AutomataApp:
         self.update_automaton_button.grid(row=6, column=0, pady=5, sticky="ew")
 
         # minimize automaton
-        self.minimize_automaton_button = ttk.Button(self.control_frame, text="Minimize automata",
+        self.minimize_automaton_button = ttk.Button(self.control_frame, text="Minimize prefix tree",
                                                   command=self.minimize_automaton)
         self.minimize_automaton_button.grid(row=7, column=0, pady=5, sticky="ew")
 

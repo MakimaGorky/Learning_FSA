@@ -1,1 +1,3 @@
-Demon strait in front of you
+"""
+Demon's treat ion
+"""
