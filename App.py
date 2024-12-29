@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-import networkx as nx
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# import networkx as nx
+# import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageTk
 
 from FSA import *

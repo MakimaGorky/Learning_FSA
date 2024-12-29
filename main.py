@@ -1,4 +1,4 @@
-from FSA import *
+# from FSA import *
 from App import *
 
 # dfa = DFA()
