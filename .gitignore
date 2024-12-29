@@ -1,5 +1,8 @@
 # MY CUSTOM gitignortions
 img/
+*.png
+sol.py
+sol1.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
